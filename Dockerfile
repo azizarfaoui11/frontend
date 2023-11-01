@@ -1,14 +1,25 @@
-# Use an official Nginx image as a parent image
-FROM nginx:latest
+# Utilisez une image Node.js pour construire l'application
+FROM node:20 AS build
 
-# Copier la configuration Nginx personnalisée dans le répertoire de configuration de Nginx
+# Répertoire de travail
+WORKDIR /app
+
+# Copiez les fichiers source de l'application
+COPY . .
+
+# Construisez l'application
+RUN npm install
+RUN npm run build
+
+# Utilisez une image légère Nginx pour servir l'application
+FROM nginx:alpine
+
+#fichier de configuration 
 COPY my-nginx.conf /etc/nginx/nginx.conf
 
-# Copier les fichiers de l'application Angular construite dans le répertoire web de Nginx
-COPY  dist/ /usr/share/nginx/html
 
-# Exposer le port 80 pour le trafic web
+# Copiez les fichiers de construction dans l'image Nginx
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Exposez le port 80
 EXPOSE 80
-
-# Démarrer Nginx avec l'option "daemon off;" pour s'exécuter en premier plan
-CMD ["nginx", "-g", "daemon off;"]
