@@ -5,7 +5,7 @@ FROM nginx:latest
 COPY my-nginx.conf /etc/nginx/nginx.conf
 
 # Copier les fichiers de l'application Angular construite dans le répertoire web de Nginx
-COPY --from=build dist/ /usr/share/nginx/html
+COPY  dist/ /usr/share/nginx/html
 
 # Exposer le port 80 pour le trafic web
 EXPOSE 80
