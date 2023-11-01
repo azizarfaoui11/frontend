@@ -9,7 +9,7 @@ COPY . .
 
 # Exécutez la commande de build de l'application Angular avec le chemin de base correct
 RUN npm install && \
-    npm run build -- --configuration=production --base-href /summer-workshop-angular/
+    npm run build -- --configuration=production --base-href http://192.168.33.10:4200/summer-workshop-angular/
 
 # Utilisez une image légère Nginx pour servir l'application
 FROM nginx:alpine
