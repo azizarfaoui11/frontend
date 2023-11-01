@@ -1,24 +1,30 @@
-# Utilisez une image Node.js pour construire l'application
-FROM node:20 AS build
+# Utilisation d'une image Node.js comme base
+FROM node:latest as build
 
-# Répertoire de travail
+# Définir le répertoire de travail
 WORKDIR /app
 
-# Copiez les fichiers source de l'application
+# Copier les fichiers package.json et package-lock.json
+COPY package*.json ./
+
+# Installer les dépendances
+RUN npm install
+
+# Copier tout le contenu de votre application Angular dans le conteneur
 COPY . .
 
-# Exécutez la commande de build de l'application Angular avec le chemin de base correct
-RUN npm install && \
-    npm run build -- --configuration=production --base-href http://192.168.33.10:4200/summer-workshop-angular/
+# Construire l'application Angular
+RUN npm run build
 
-# Utilisez une image légère Nginx pour servir l'application
-FROM nginx:alpine
+# Utilisation d'une image nginx pour servir l'application Angular
+FROM nginx:latest
 
-# Copiez le fichier de configuration Nginx
-COPY my-nginx.conf /etc/nginx/nginx.conf
+# Copier les fichiers de l'application construite dans le serveur nginx
+COPY --from=build /app/dist/* /usr/share/nginx/html/
 
-# Copiez les fichiers de construction dans l'image Nginx
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Exposez le port 80
+# Exposer le port 80
 EXPOSE 80
+
+# Commande pour démarrer nginx
+CMD ["nginx", "-g", "daemon off;"]
+
