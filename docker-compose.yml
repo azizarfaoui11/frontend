@@ -1,6 +1,5 @@
 version: '3'
 services:
-
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -15,11 +14,13 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
+
   mysql:
     image: mysql:latest
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=devops
+
   spring-app:
     image: aziz1123/backend-app:latest
     depends_on:
@@ -30,10 +31,10 @@ services:
       - SPRING_DATASOURCE_PASSWORD=
     ports:
       - "8082:8082"
+
   angular-app:
-    image:  aziz1123/frontend-app:latest
+    image: aziz1123/frontend-app:latest
     ports:
-      - "4200:80"  #
-   depends_on:
+      - "4200:80"
+    depends_on:
       - spring-app
-  
