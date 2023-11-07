@@ -1,12 +1,12 @@
 version: '3'
 services:
-  prometheus:
+  prometheuss:
     image: prom/prometheus:latest
     container_name: prometheus
     ports:
       - "9090:9090"
 
-  grafana:
+  grafanaa:
     image: grafana/grafana:latest
     container_name: grafana
     ports:
@@ -21,7 +21,7 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=devops
 
-  spring-app:
+  spring-appp:
     image: aziz1123/backend-app:latest
     depends_on:
       - mysql
